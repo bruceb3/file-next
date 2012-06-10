@@ -10,7 +10,6 @@ my $perl = $^X;
 plan tests => 3;
 
 prime_namedpipe('namedpipe', 'Changes');
-#tickle_namedpipe('namedpipe');
 
 my @output = qx{sh -c "$perl -Mblib t/first-and-last-lines-via-process-pipe.pl namedpipe"};
 chomp @output;
@@ -39,16 +38,6 @@ sub prime_namedpipe {
         close $np;
         exit 0;
     }
-}
-
-sub tickle_namedpipe {
-    my $pipe_name = shift;
-    my $pid = fork();
-    if ( $pid == 0 ) {
-        open my $f, '<', $pipe_name;
-        exit 0;
-    }
-    waitpid $pid, 0;
 }
 
 sub cleanup_namedpipe {
